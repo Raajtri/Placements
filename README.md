@@ -127,9 +127,12 @@ isolated, so that swap doesn't touch the rest of the app.
 If you deploy `client/` on Vercel while the API stays on Railway (two different domains, instead
 of the single-service setup above), two things need to change:
 
-1. **`vercel.json`** (already added at the repo root) tells Vercel to build only `client/` and
-   publish `client/dist` — Vercel's default assumes a `public/` folder at the repo root, which
-   doesn't exist in this monorepo layout, hence the "No Output Directory" error.
+1. **Set the Vercel project's Root Directory to `client`** (Project → Settings → General → Root
+   Directory). This repo is a monorepo, so Vercel needs to be told which subfolder is the actual
+   frontend project — with that set, Vercel auto-detects Vite and handles install/build/output
+   directory itself; no custom `vercel.json` or build command needed. (Leaving Root Directory as
+   the repo root is what causes the "No Output Directory named public" error, since Vercel then
+   looks for a build at the repo root instead of inside `client/`.)
 2. **Cross-site cookies.** The refresh-token cookie is `httpOnly` + `sameSite=lax` by default,
    which browsers will **not** send on a cross-site fetch/XHR request (Vercel domain → Railway
    domain) — session refresh would silently fail even though login works. Fix: on the Railway
