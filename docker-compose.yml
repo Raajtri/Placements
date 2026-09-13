@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: agi_placement_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: agi_admin
+      POSTGRES_PASSWORD: agi_dev_password
+      POSTGRES_DB: agi_placement
+      POSTGRES_HOST_AUTH_METHOD: md5
+      POSTGRES_INITDB_ARGS: "--auth-host=md5"
+    ports:
+      - "5433:5432"
+    volumes:
+      - agi_pg_data:/var/lib/postgresql/data
+
+volumes:
+  agi_pg_data:

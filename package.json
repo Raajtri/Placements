@@ -1,0 +1,11 @@
+{
+  "name": "agi-placement-portal",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "install:all": "cd server && npm install && cd ../client && npm install",
+    "build": "npm run install:all && npm run build --prefix client && npm run build --prefix server",
+    "start": "npm run start --prefix server",
+    "seed": "npm run seed --prefix server"
+  }
+}
