@@ -122,6 +122,28 @@ resolves to. For anything beyond a demo, migrate `server/src/routes/documents.ro
 object storage (S3 / Cloudflare R2) instead — the upload/download interface is small and
 isolated, so that swap doesn't touch the rest of the app.
 
+## Deploying the frontend separately on Vercel
+
+If you deploy `client/` on Vercel while the API stays on Railway (two different domains, instead
+of the single-service setup above), two things need to change:
+
+1. **`vercel.json`** (already added at the repo root) tells Vercel to build only `client/` and
+   publish `client/dist` — Vercel's default assumes a `public/` folder at the repo root, which
+   doesn't exist in this monorepo layout, hence the "No Output Directory" error.
+2. **Cross-site cookies.** The refresh-token cookie is `httpOnly` + `sameSite=lax` by default,
+   which browsers will **not** send on a cross-site fetch/XHR request (Vercel domain → Railway
+   domain) — session refresh would silently fail even though login works. Fix: on the Railway
+   service, set:
+   - `COOKIE_SAMESITE=none` (requires HTTPS, which Railway provides)
+   - `CLIENT_ORIGIN=https://your-app.vercel.app` (exact Vercel domain, for CORS)
+
+   And on the Vercel project, set:
+   - `VITE_API_URL=https://your-api.up.railway.app/api` (the full Railway URL — `/api` alone
+     only works when frontend and API share an origin)
+
+If you don't need two domains, the single-service Railway deploy described above is simpler and
+avoids this class of issue entirely.
+
 ## Real data vs. demo data
 
 Institute names, addresses, and program names are sourced from the official AIMSR and ACAAD

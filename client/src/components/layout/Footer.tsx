@@ -36,6 +36,8 @@ export function Footer() {
       </div>
       <div className="border-t border-white/10 py-4 text-center text-xs text-slate-400">
         © {new Date().getFullYear()} Aditya Group of Institution — Placement Cell. All data marked "demo" is illustrative only.
+        <br />
+        Developed by Aman Tripathi and Sushant Tiwari
       </div>
     </footer>
   );

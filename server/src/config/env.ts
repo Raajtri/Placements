@@ -17,4 +17,9 @@ export const env = {
   refreshTokenTtl: process.env.REFRESH_TOKEN_TTL ?? "7d",
   clientOrigin: process.env.CLIENT_ORIGIN ?? "http://localhost:5173",
   uploadDir: process.env.UPLOAD_DIR ?? "../uploads",
+  // "lax" works when the frontend and API share a domain (the default single-service deploy).
+  // Set COOKIE_SAMESITE=none when the frontend is hosted separately (e.g. Vercel) from the API
+  // (e.g. Railway) — cross-site fetch/XHR never sends a Lax cookie, which would silently break
+  // session refresh. "none" requires secure:true, i.e. HTTPS, which is why it's opt-in.
+  cookieSameSite: (process.env.COOKIE_SAMESITE as "lax" | "none" | "strict") ?? "lax",
 };

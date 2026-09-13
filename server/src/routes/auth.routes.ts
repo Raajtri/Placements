@@ -21,8 +21,8 @@ const REFRESH_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 function setRefreshCookie(res: any, token: string) {
   res.cookie(REFRESH_COOKIE, token, {
     httpOnly: true,
-    secure: env.nodeEnv === "production",
-    sameSite: "lax",
+    secure: env.nodeEnv === "production" || env.cookieSameSite === "none",
+    sameSite: env.cookieSameSite,
     maxAge: REFRESH_TTL_MS,
     path: "/api/auth",
   });
